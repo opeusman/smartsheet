@@ -122,10 +122,13 @@ if __name__ == '__main__':
     parser.add_argument("-d", help="output file directory", default='')
     #parser.add_argument("-g", type=int, help="number of grouping")
     parser.add_argument("-s", "--sheet-name", help="Name of the Smartsheet sheet", default='data')
+    parser.add_argument("-i", help="Test Installation", action="store_true")
     args = parser.parse_args()
 
-    print(args)
-    exit(0)
+    if args.i:
+        print('Inspection: program is correctly configured')
+        sys.exit(1)
+
     sheet_id = get_sheet_id(args.sheet_name)
 
     cy = get_sheet_data(sheet_id, grp={
