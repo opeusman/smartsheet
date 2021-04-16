@@ -12,7 +12,11 @@ smart = smartsheet.Smartsheet()
 smart.errors_as_exceptions(True)
 
 
-def get_sheet_data(sheet_id, grp):
+def get_sheet_data(sheet_id,):
+    grp = {
+        'level1': 'country',
+        'level2': 'state'
+    }
     result = {}
 
     next_page = 1
@@ -131,9 +135,6 @@ if __name__ == '__main__':
 
     sheet_id = get_sheet_id(args.sheet_name)
 
-    cy = get_sheet_data(sheet_id, grp={
-        'level1': 'country',
-        'level2': 'state'
-    })
+    cy = get_sheet_data(sheet_id, )
 
     process_output(cy, args.o, args.d)
