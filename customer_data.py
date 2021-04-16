@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import sys, getopt
+import sys, os
 import smartsheet
 import pprint
 import json
@@ -9,7 +9,7 @@ import argparse
 
 
 smart = smartsheet.Smartsheet()
-smart.errors_as_exceptions(True)
+smart.errors_as_exceptions(False)
 
 
 def get_sheet_data(sheet_id,):
@@ -46,16 +46,16 @@ def get_sheet_data(sheet_id,):
 
                 if cell.column_id == lvl1_id:
                     if not cell.value in result.keys():
-                        result.update({cell.value: {'arrTotal': 0, 'uniqstates': [], 'States': []}})
+                        result.update({cell.value: {'arrTotal': 0, 'Unique States': [], 'States': []}})
 
                     lvl1 = row_values[grp.get('level1')]
 
                 elif cell.column_id == lvl2_id:
                     lvl1 = row_values[grp.get('level1')]
 
-                    if not cell.value in result[lvl1]['uniqstates']:
+                    if not cell.value in result[lvl1]['Unique States']:
                         result[lvl1]['States'].append({cell.value: {'arrTotal': 0, 'customers': []}})
-                        result[lvl1]['uniqstates'].append(cell.value)
+                        result[lvl1]['Unique States'].append(cell.value)
 
                     lvl2 = row_values[grp.get('level2')]
 
@@ -109,11 +109,13 @@ def process_output(data: dict, output_type, destination=""):
     # pprint.pprint(data, indent=5)
     # sys.exit(0)
 
+    fullpath = os.path.join(destination, f'output.{output_type}')
+
     if output_type == 'json':
-        with open('./output.json', 'w') as f:
+        with open(fullpath, 'w') as f:
             json.dump(data, f, indent=True)
     elif output_type == "xml":
-        with open('./output.xml', 'w') as f:
+        with open(fullpath, 'w') as f:
             f.write(dict2xml.dict2xml(data))
     elif output_type == "cli":
         pprint.pprint(data, indent=5)
