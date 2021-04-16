@@ -101,17 +101,17 @@ def get_sheet_id(sheetname):
     #sys.exit(2)
 
 
-def process_output(data: dict):
-    pprint.pprint(data, indent=5)
-    sys.exit(0)
+def process_output(data: dict, output_type, destination=""):
+    # pprint.pprint(data, indent=5)
+    # sys.exit(0)
 
-    if smt_args['output_type'] == 'json':
+    if output_type == 'json':
         with open('./output.json', 'w') as f:
             json.dump(data, f, indent=True)
-    elif smt_args['output_type'] == "xml":
+    elif output_type == "xml":
         with open('./output.xml', 'w') as f:
             f.write(dict2xml.dict2xml(data))
-    elif smt_args['output_type'] == "cli":
+    elif output_type == "cli":
         pprint.pprint(data, indent=5)
 
 
@@ -119,18 +119,18 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-o", help="output type, default is json", choices=['json', 'xml', 'cli'], default='json')
-    parser.add_argument("-d", help="output file directory")
+    parser.add_argument("-d", help="output file directory", default='')
     #parser.add_argument("-g", type=int, help="number of grouping")
-    parser.add_argument("-s", help="nmae of the Smartsheet sheet", default='data')
+    parser.add_argument("-s", "--sheet-name", help="Name of the Smartsheet sheet", default='data')
     args = parser.parse_args()
 
-    #process_argv(sys.argv[1:])
-
-    sheet_id = get_sheet_id()
+    print(args)
+    exit(0)
+    sheet_id = get_sheet_id(args.sheet_name)
 
     cy = get_sheet_data(sheet_id, grp={
         'level1': 'country',
         'level2': 'state'
     })
 
-    process_output(cy)
+    process_output(cy, args.o, args.d)
