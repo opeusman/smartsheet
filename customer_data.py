@@ -12,7 +12,12 @@ smart = smartsheet.Smartsheet()
 smart.errors_as_exceptions(False)
 
 
-def get_sheet_data(sheet_id,):
+def get_sheet_data(sheet_id: int):
+    """
+    Retrieves and groups customer data from SmartSheet platform
+    :param sheet_id: int
+    :return: grouped smartsheet sheet data
+    """
     grp = {
         'level1': 'country',
         'level2': 'state'
@@ -74,7 +79,12 @@ def get_sheet_data(sheet_id,):
     return result
 
 
-def load_columns(columns_data):
+def load_columns(columns_data) -> dict :
+    """
+    Extracts the columns from sheet data object
+    :param columns_data:
+    :return: serialised columns
+    """
     cols = {}
 
     for col in columns_data:
@@ -83,13 +93,24 @@ def load_columns(columns_data):
     return cols
 
 
-def get_column_id(columns, column_name):
+def get_column_id(columns: dict, column_name: str) -> str:
+    """
+    Converts column title to column Id
+    :param columns:
+    :param column_name:
+    :return:
+    """
     for col in columns:
         if column_name == col.title:
             return col.id
 
 
 def get_sheet_id(sheetname):
+    """
+    Get the sheet id based on a given sheet name
+    :param sheetname:
+    :return:
+    """
     pg = 1
 
     while True:
@@ -124,8 +145,8 @@ def process_output(data: dict, output_type, destination=""):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-o", help="output type, default is json", choices=['json', 'xml', 'cli'], default='json')
-    parser.add_argument("-d", help="output file directory", default='')
+    parser.add_argument("-o", help="Output type, default is json", choices=['json', 'xml', 'cli'], default='json')
+    parser.add_argument("-d", help="Output file directory", default='')
     #parser.add_argument("-g", type=int, help="number of grouping")
     parser.add_argument("-s", "--sheet-name", help="Name of the Smartsheet sheet", default='data')
     parser.add_argument("-i", help="Test Installation", action="store_true")
