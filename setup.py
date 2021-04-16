@@ -11,7 +11,7 @@ setup(
     description='Script to extract data from Smartsheet',
     python_requires='>=3',
     install_requires=[
-        'smartsheet',
+        'smartsheet-python-sdk',
         'dict2xml'
     ]
 )
